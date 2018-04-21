@@ -1,0 +1,6 @@
+1, Apple, 0.99, 0.12, BigProduceGuy, 200, 20
+2, Orange, 0.89, 0.14, BigProduceGuy, 200, 20
+3, Banana, 0.29, 0.09, BigProduceGuy, 200, 20
+4, Milk, 2.99, 1.55, BigProduceGuy, 200, 20
+5, Tomato, 0.59, 0.10, BigProduceGuy, 200, 20
+6, Carrot Bunch, 0.99, 0.12, BigProduceGuy, 200, 20

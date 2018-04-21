@@ -1,0 +1,4 @@
+1,Scott,abc,cashier
+2,Michael,abc,manager
+3,Brima,abc,cashier
+4,Karishma,abc,manager
