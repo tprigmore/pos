@@ -100,6 +100,12 @@ public class Item
 		this.orderThreshold = quantity;
 	}
 
+	public boolean equals(int num)
+	{
+
+		return itemNumber == num;
+	}
+
 	public String toString()
 	{
 		return itemNumber + " " + name + " " + quantity;
