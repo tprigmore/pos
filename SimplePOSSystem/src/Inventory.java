@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -6,6 +7,7 @@ public class Inventory
 {
 	private NodeList<Item> inventory;
 	final String FILE = "Inventory.txt";
+	final String FILE_OUT = "Inventory_new.txt";
 
 	public Inventory()
 	{
@@ -42,6 +44,47 @@ public class Inventory
 		catch (IOException e)
 		{
 			System.out.println("Problem opening Inventory.txt");
+		}
+	}
+
+	public void writeInventoryFile()
+	{
+		FileWriter fileOut;
+
+		try
+		{
+			fileOut = new FileWriter(FILE_OUT);
+
+			Node<Item> node = inventory.getHead().getNext();
+
+			while (node != null)
+			{
+				String stringOut = "";
+				stringOut += Integer.toString((node.getElement().getItemNumber()));
+				stringOut += ",";
+				stringOut += node.getElement().getName();
+				stringOut += ",";
+				stringOut += Double.toString((node.getElement().getSalePrice()));
+				stringOut += ",";
+				stringOut += Double.toString((node.getElement().getCost()));
+				stringOut += ",";
+				stringOut += node.getElement().getSupplier();
+				stringOut += ",";
+				stringOut += Integer.toString((node.getElement().getQuantity()));
+				stringOut += ",";
+				stringOut += Integer.toString((node.getElement().getQuantityOnOrder()));
+				stringOut += ",";
+				stringOut += Integer.toString((node.getElement().getOrderThreshold()));
+
+				fileOut.write(stringOut);
+
+			}
+
+			fileOut.close();
+		}
+		catch (IOException e)
+		{
+			System.out.println("problem opening output file.");
 		}
 	}
 
@@ -113,6 +156,26 @@ public class Inventory
 	public Item first()
 	{
 		return inventory.first();
+	}
+
+	public Node<Item> getHead()
+	{
+		return inventory.getHead();
+	}
+
+	public Node<Item> getTail()
+	{
+		return inventory.getTail();
+	}
+
+	public Node<Item> getNext(Node<Item> node)
+	{
+		return inventory.getNext(node);
+	}
+
+	public Node<Item> getPrev(Node<Item> node)
+	{
+		return inventory.getPrev(node);
 	}
 
 	public Item last()
