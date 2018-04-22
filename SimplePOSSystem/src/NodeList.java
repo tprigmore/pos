@@ -90,6 +90,26 @@ public class NodeList<T>
 		return tail.getPrev().getElement();
 	}
 
+	public Node<T> getHead()
+	{
+		return head;
+	}
+
+	public Node<T> getTail()
+	{
+		return tail;
+	}
+
+	public Node<T> getNext(Node<T> node)
+	{
+		return node.getNext();
+	}
+
+	public Node<T> getPrev(Node<T> node)
+	{
+		return node.getPrev();
+	}
+
 	public int size()
 	{
 		return (count);
