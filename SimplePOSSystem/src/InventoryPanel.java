@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class InventoryPanel extends JPanel
 {
@@ -15,13 +15,31 @@ public class InventoryPanel extends JPanel
 	public final int WIDTH = 1024;
 	public final int HEIGHT = 800;
 
+	private JTextField textAreaItemNumber;
+	private JTextField textAreaDescription;
+	private JTextField textAreaQuantity;
+	private JTextField textAreaCost;
+	private JTextField textAreaSupplier;
+	private JTextField textAreaSalesPrice;
+	private JTextField textAreaQuantityOnOrder;
+	private JTextField textAreaThreshold;
+	private JButton btnAdd;
+	private JButton btnUpdate;
+	private JButton btnRemove;
+
+	private Inventory myInventory;
+
 	public InventoryPanel(Inventory inventory)
 	{
+		myInventory = inventory;
+
 		setLayout(null);
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
 		// setBackground(Color.white);
 		setBackground(Color.LIGHT_GRAY);
+
+		// JLabels
 
 		JLabel labeltitleInventory = new JLabel("Inventory");
 		labeltitleInventory.setFont(new Font("Cambria", Font.BOLD, 30));
@@ -53,26 +71,6 @@ public class InventoryPanel extends JPanel
 		labelSalePrice.setBounds(29, 448, 101, 37);
 		add(labelSalePrice);
 
-		JTextArea textAreaDescription = new JTextArea();
-		textAreaDescription.setBounds(187, 193, 648, 37);
-		add(textAreaDescription);
-
-		JTextArea textAreaQuantity = new JTextArea();
-		textAreaQuantity.setBounds(188, 278, 163, 37);
-		add(textAreaQuantity);
-
-		JTextArea textAreaCost = new JTextArea();
-		textAreaCost.setBounds(188, 363, 163, 37);
-		add(textAreaCost);
-
-		JTextArea textAreaSupplier = new JTextArea();
-		textAreaSupplier.setBounds(187, 533, 324, 37);
-		add(textAreaSupplier);
-
-		JTextArea textAreaSalesPrice = new JTextArea();
-		textAreaSalesPrice.setBounds(187, 448, 163, 37);
-		add(textAreaSalesPrice);
-
 		JLabel labelSupplier = new JLabel("Supplier");
 		labelSupplier.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		labelSupplier.setBounds(29, 533, 163, 40);
@@ -83,54 +81,157 @@ public class InventoryPanel extends JPanel
 		labelQuantityOnOrder.setBounds(477, 266, 192, 54);
 		add(labelQuantityOnOrder);
 
-		JTextArea textAreaQuantityOnOrder = new JTextArea();
-		textAreaQuantityOnOrder.setBounds(679, 284, 163, 37);
-		add(textAreaQuantityOnOrder);
-
-		JTextArea textAreaItemNumber = new JTextArea();
-		textAreaItemNumber.setBounds(187, 97, 163, 37);
-		add(textAreaItemNumber);
-		textAreaItemNumber.setText(inventory.last().getItemNumber() + 1 + " ");
-
 		JLabel lblThresholdToOrder = new JLabel("Threshold to Order");
 		lblThresholdToOrder.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblThresholdToOrder.setBounds(477, 370, 192, 54);
 		add(lblThresholdToOrder);
 
-		JTextArea textAreaThreshold = new JTextArea();
+		// JTextAreas
+
+		textAreaItemNumber = new JTextField();
+		textAreaItemNumber.setBounds(187, 97, 163, 37);
+		textAreaItemNumber.addActionListener(new TextListener());
+		add(textAreaItemNumber);
+		textAreaItemNumber.setText(inventory.last().getItemNumber() + 1 + " ");
+
+		textAreaDescription = new JTextField();
+		textAreaDescription.setBounds(187, 193, 648, 37);
+		add(textAreaDescription);
+
+		textAreaQuantity = new JTextField();
+		textAreaQuantity.setBounds(188, 278, 163, 37);
+		add(textAreaQuantity);
+
+		textAreaCost = new JTextField();
+		textAreaCost.setBounds(188, 363, 163, 37);
+		add(textAreaCost);
+
+		textAreaSupplier = new JTextField();
+		textAreaSupplier.setBounds(187, 533, 324, 37);
+		add(textAreaSupplier);
+
+		textAreaSalesPrice = new JTextField();
+		textAreaSalesPrice.setBounds(187, 448, 163, 37);
+		add(textAreaSalesPrice);
+
+		textAreaQuantityOnOrder = new JTextField();
+		textAreaQuantityOnOrder.setBounds(679, 284, 163, 37);
+		add(textAreaQuantityOnOrder);
+
+		textAreaThreshold = new JTextField();
 		textAreaThreshold.setBounds(679, 377, 156, 37);
 		add(textAreaThreshold);
 
-		JButton btnAdd = new JButton("Add");
+		// JButtons
+
+		btnAdd = new JButton("Add");
 		btnAdd.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnAdd.addActionListener(new ButtonListener());
 		btnAdd.setBounds(29, 604, 163, 47);
 		add(btnAdd);
 
-		JButton btnRemove = new JButton("Remove");
+		btnRemove = new JButton("Remove");
 		btnRemove.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnRemove.addActionListener(new ButtonListener());
 		btnRemove.setBounds(222, 604, 163, 47);
 		add(btnRemove);
 
-		JButton btnUpdate = new JButton("Update");
+		btnUpdate = new JButton("Update");
 		btnUpdate.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnUpdate.addActionListener(new ButtonListener());
 		btnUpdate.setBounds(410, 604, 163, 47);
 		add(btnUpdate);
 
-		JButton btnReturn = new JButton("Return to Menu");
-		btnReturn.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnReturn.addActionListener(new ButtonListener());
-		btnReturn.setBounds(663, 604, 213, 47);
-		add(btnReturn);
 	}
 
 	private class ButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
+			Object source = event.getSource();
+
+			if (source == btnAdd)
+			{
+
+				int itemNumber = Integer.parseInt(textAreaItemNumber.getText());
+
+				String name = textAreaDescription.getText();
+
+				int quantity = Integer.parseInt(textAreaQuantity.getText());
+
+				Double cost = Double.parseDouble(textAreaCost.getText());
+
+				String supplier = textAreaSupplier.getText();
+
+				Double salePrice = Double.parseDouble(textAreaSalesPrice.getText());
+
+				int quantityOnOrder = Integer.parseInt(textAreaQuantityOnOrder.getText());
+
+				int threshold = Integer.parseInt(textAreaThreshold.getText());
+
+				myInventory.addNewItem(itemNumber, name, salePrice, cost, supplier, quantity, quantityOnOrder,
+						threshold);
+			}
+
+			else if (source == btnRemove)
+			{
+				int itemNumber = Integer.parseInt(textAreaItemNumber.getText());
+				myInventory.removeItemByNumber(itemNumber);
+				clearTextAreas();
+			}
+			else if (source == btnUpdate)
+			{
+			}
+			else
+			{
+			}
+
+		}
+
+	}
+
+	private class TextListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			String text = textAreaItemNumber.getText();
+			int itemNumber = Integer.parseInt(text);
+
+			Item item = myInventory.getItem(itemNumber);
+			if (item == null)
+			{
+				int number = myInventory.last().getItemNumber() + 1;
+				textAreaItemNumber.setText(Integer.toString(number));
+			}
+			else
+			{
+				setTextAreas(item);
+			}
 
 		}
 	}
+
+	private void setTextAreas(Item item)
+	{
+		textAreaDescription.setText(item.getName());
+		textAreaQuantity.setText(Integer.toString(item.getQuantity()));
+		textAreaCost.setText(Double.toString(item.getCost()));
+		textAreaSupplier.setText(item.getSupplier());
+		textAreaSalesPrice.setText(Double.toString(item.getSalePrice()));
+		textAreaQuantityOnOrder.setText(Integer.toString(item.getQuantityOnOrder()));
+		textAreaThreshold.setText(Integer.toString(item.getOrderThreshold()));
+	}
+
+	private void clearTextAreas()
+	{
+		textAreaItemNumber.setText(myInventory.last().getItemNumber() + 1 + " ");
+		textAreaDescription.setText("");
+		textAreaQuantity.setText("0");
+		textAreaCost.setText("0.0");
+		textAreaSupplier.setText("");
+		textAreaSalesPrice.setText("0.0");
+		textAreaQuantityOnOrder.setText("0");
+		textAreaThreshold.setText("0");
+	}
+
 }

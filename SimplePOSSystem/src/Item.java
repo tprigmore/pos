@@ -7,16 +7,31 @@ public class Item
 	private Double cost;
 	private String supplier;
 	private int quantity;
+	private int quantityOnOrder;
 	private int orderThreshold;
 
 	public Item()
 	{
-
+		this.itemNumber = 0;
+		this.name = "";
+		this.salePrice = 0.0;
+		this.cost = 0.0;
+		this.supplier = "";
+		this.quantity = 0;
+		this.quantityOnOrder = 0;
+		this.orderThreshold = 100;
 	}
 
 	public Item(int num)
 	{
-		itemNumber = num;
+		this.itemNumber = num;
+		this.name = "";
+		this.salePrice = 0.0;
+		this.cost = 0.0;
+		this.supplier = "";
+		this.quantity = 0;
+		this.quantityOnOrder = 0;
+		this.orderThreshold = 100;
 	}
 
 	public Item(int num, String Name, Double SalePrice, Double Cost, String Supplier, int Quantity, int Threshold)
@@ -27,6 +42,7 @@ public class Item
 		this.cost = Cost;
 		this.supplier = Supplier;
 		this.quantity = Quantity;
+		this.quantityOnOrder = 0;
 		this.orderThreshold = Threshold;
 	}
 
@@ -88,6 +104,16 @@ public class Item
 	public void setQuantity(int quantity)
 	{
 		this.quantity = quantity;
+	}
+
+	public int getQuantityOnOrder()
+	{
+		return quantityOnOrder;
+	}
+
+	public void setQuantityOnOrder(int quantityOnOrder)
+	{
+		this.quantityOnOrder = quantity;
 	}
 
 	public int getOrderThreshold()
