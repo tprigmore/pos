@@ -33,6 +33,7 @@ public class Inventory
 				item.setCost(Double.parseDouble(lineScan.next()));
 				item.setSupplier(lineScan.next());
 				item.setQuantity(Integer.parseInt(lineScan.next()));
+				item.setQuantityOnOrder(Integer.parseInt(lineScan.next()));
 				item.setOrderThreshold(Integer.parseInt(lineScan.next()));
 				this.inventory.insertLast(item);
 			}
@@ -44,8 +45,13 @@ public class Inventory
 		}
 	}
 
+	public void addItemLast(Item item)
+	{
+		this.inventory.insertLast(item);
+	}
+
 	public void addNewItem(int num, String Name, Double SalePrice, Double Cost, String Supplier, int Quantity,
-			int Threshold)
+			int QuantityOnOrder, int Threshold)
 	{
 		Item item = new Item();
 		item.setItemNumber(inventory.last().getItemNumber() + 1);
@@ -54,9 +60,17 @@ public class Inventory
 		item.setCost(Cost);
 		item.setSupplier(Supplier);
 		item.setQuantity(Quantity);
+		item.setQuantityOnOrder(QuantityOnOrder);
 		item.setOrderThreshold(Threshold);
 
 		this.inventory.insertLast(item);
+	}
+
+	public void removeItemByNumber(int itemNumber)
+	{
+		Node<Item> node = inventory.find(itemNumber);
+		if (node != null)
+			this.inventory.remove(node);
 	}
 
 	public Item getItem(int itemNumber)
