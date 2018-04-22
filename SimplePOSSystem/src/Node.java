@@ -38,26 +38,26 @@ public class Node<T>
 
 	public Node<T> getNext()
 	{
-		return next;
+		return this.next;
 	}
 
 	public Node<T> getPrev()
 	{
-		return prev;
+		return this.prev;
 	}
 
 	public T getElement()
 	{
-		return el;
+		return this.el;
 	}
 
 	public boolean equals(Object obj)
 	{
-		return el.equals(obj);
+		return this.el.equals(obj);
 	}
 
 	public String toString()
 	{
-		return el.toString() + "\n";
+		return this.el.toString() + "\n";
 	}
 }

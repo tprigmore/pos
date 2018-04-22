@@ -200,6 +200,7 @@ public class InventoryPanel extends JPanel
 			Item item = myInventory.getItem(itemNumber);
 			if (item == null)
 			{
+				clearTextAreas();
 				int number = myInventory.last().getItemNumber() + 1;
 				textAreaItemNumber.setText(Integer.toString(number));
 			}

@@ -11,8 +11,6 @@ public class Inventory
 	{
 		this.inventory = new NodeList<Item>();
 
-		Item item = new Item();
-
 		String line;
 		Scanner lineScan, fileScanIn;
 
@@ -22,6 +20,8 @@ public class Inventory
 			// Read and process each line of the file
 			while (fileScanIn.hasNext())
 			{
+				Item item = new Item();
+
 				line = fileScanIn.nextLine();
 
 				lineScan = new Scanner(line);

@@ -126,10 +126,10 @@ public class Item
 		this.orderThreshold = quantity;
 	}
 
-	public boolean equals(int num)
+	public boolean equals(Object num)
 	{
 
-		return itemNumber == num;
+		return itemNumber == (int) num;
 	}
 
 	public String toString()
