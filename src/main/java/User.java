@@ -1,5 +1,9 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class User
@@ -83,7 +87,11 @@ public class User
 
 		try
 		{
-			Scanner fileScanIn = new Scanner(new File(userFile));
+			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+			File file = new File(classLoader.getResource(userFile).getFile());
+			InputStream fileInputStream = new FileInputStream(file);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
+			Scanner fileScanIn = new Scanner(reader);
 			while (fileScanIn.hasNext())
 			{
 				line = fileScanIn.nextLine();
@@ -110,7 +118,7 @@ public class User
 		}
 		catch (FileNotFoundException e)
 		{
-			System.out.println("The " + userFile + "file was not found.");
+			System.out.println("The " + userFile + " file was not found.");
 		}
 
 		return valid;
