@@ -1,6 +1,10 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class Inventory
@@ -9,16 +13,23 @@ public class Inventory
 	final String FILE = "Inventory.txt";
 	final String FILE_OUT = "Inventory_new.txt";
 
-	public Inventory()
+	public Inventory() throws IOException
 	{
 		this.inventory = new NodeList<Item>();
 
 		String line;
 		Scanner lineScan, fileScanIn;
 
+		InputStream fileInputStream = null;
+		BufferedReader reader = null;
 		try
 		{
-			fileScanIn = new Scanner(new File(FILE));
+			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+			File file = new File(classLoader.getResource(FILE).getFile());
+			fileInputStream = new FileInputStream(file);
+			reader = new BufferedReader(new InputStreamReader(fileInputStream));
+
+			fileScanIn = new Scanner(reader);
 			// Read and process each line of the file
 			while (fileScanIn.hasNext())
 			{
@@ -44,6 +55,9 @@ public class Inventory
 		catch (IOException e)
 		{
 			System.out.println("Problem opening Inventory.txt");
+		} finally {
+			fileInputStream.close();
+			reader.close();
 		}
 	}
 
