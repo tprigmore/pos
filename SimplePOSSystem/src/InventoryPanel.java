@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -148,26 +149,89 @@ public class InventoryPanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent event)
 		{
+			int itemNumber = 0;
+			String name = "";
+			int quantity = 0;
+			Double cost = 0.0;
+			Double salePrice = 0.0;
+			int quantityOnOrder = 0;
+			int threshold = 20;
+			textAreaItemNumber.setForeground(Color.black);
+			textAreaQuantity.setForeground(Color.black);
+			textAreaCost.setForeground(Color.black);
+			textAreaSalesPrice.setForeground(Color.black);
+			textAreaQuantityOnOrder.setForeground(Color.black);
+			textAreaThreshold.setForeground(Color.black);
+			textAreaItemNumber.setForeground(Color.black);
+
 			Object source = event.getSource();
 
 			if (source == btnAdd)
 			{
 
-				int itemNumber = Integer.parseInt(textAreaItemNumber.getText());
+				try
+				{
+					itemNumber = Integer.parseInt(textAreaItemNumber.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaItemNumber.setForeground(Color.red);
+				}
 
-				String name = textAreaDescription.getText();
+				name = textAreaDescription.getText();
 
-				int quantity = Integer.parseInt(textAreaQuantity.getText());
+				try
+				{
+					quantity = Integer.parseInt(textAreaQuantity.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaQuantity.setForeground(Color.red);
+				}
 
-				Double cost = Double.parseDouble(textAreaCost.getText());
+				try
+				{
+					cost = Double.parseDouble(textAreaCost.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaCost.setForeground(Color.red);
+				}
 
 				String supplier = textAreaSupplier.getText();
 
-				Double salePrice = Double.parseDouble(textAreaSalesPrice.getText());
+				try
+				{
+					salePrice = Double.parseDouble(textAreaSalesPrice.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaSalesPrice.setForeground(Color.red);
+				}
 
-				int quantityOnOrder = Integer.parseInt(textAreaQuantityOnOrder.getText());
+				try
+				{
+					quantityOnOrder = Integer.parseInt(textAreaQuantityOnOrder.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaQuantityOnOrder.setForeground(Color.red);
+				}
 
-				int threshold = Integer.parseInt(textAreaThreshold.getText());
+				try
+				{
+					threshold = Integer.parseInt(textAreaThreshold.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaThreshold.setForeground(Color.red);
+				}
 
 				myInventory.addNewItem(itemNumber, name, salePrice, cost, supplier, quantity, quantityOnOrder,
 						threshold);
@@ -175,7 +239,16 @@ public class InventoryPanel extends JPanel
 
 			else if (source == btnRemove)
 			{
-				int itemNumber = Integer.parseInt(textAreaItemNumber.getText());
+				try
+				{
+					itemNumber = Integer.parseInt(textAreaItemNumber.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaItemNumber.setForeground(Color.red);
+				}
+
 				myInventory.removeItemByNumber(itemNumber);
 				clearTextAreas();
 			}
@@ -194,8 +267,20 @@ public class InventoryPanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			String text = textAreaItemNumber.getText();
-			int itemNumber = Integer.parseInt(text);
+
+			int itemNumber = 0;
+			textAreaItemNumber.setForeground(Color.black);
+
+			try
+			{
+				String text = textAreaItemNumber.getText();
+				itemNumber = Integer.parseInt(text);
+			}
+			catch (NumberFormatException e)
+			{
+				Toolkit.getDefaultToolkit().beep();
+				textAreaItemNumber.setForeground(Color.red);
+			}
 
 			Item item = myInventory.getItem(itemNumber);
 			if (item == null)
@@ -232,7 +317,7 @@ public class InventoryPanel extends JPanel
 		textAreaSupplier.setText("");
 		textAreaSalesPrice.setText("0.0");
 		textAreaQuantityOnOrder.setText("0");
-		textAreaThreshold.setText("0");
+		textAreaThreshold.setText("20");
 	}
 
 }
