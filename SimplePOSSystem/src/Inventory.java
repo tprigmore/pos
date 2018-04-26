@@ -7,7 +7,7 @@ public class Inventory
 {
 	private NodeList<Item> inventory;
 	final String FILE = "Inventory.txt";
-	final String FILE_OUT = "Inventory_new.txt";
+	final String FILE_BAK = "Inventory.txt.bak";
 
 	public Inventory()
 	{
@@ -50,10 +50,24 @@ public class Inventory
 	public void writeInventoryFile()
 	{
 		FileWriter fileOut;
+		File f = new File(FILE);
+		File fbak = new File(FILE + ".bak");
+
+		// If FILE exists, rename it FILE + _date_time.bak
+		boolean isFileRenamed = f.renameTo(fbak);
+
+		if (isFileRenamed)
+		{
+			System.out.println("Inventory bak up created.");
+		}
+		else
+		{
+			System.out.println("Error renaming the file");
+		}
 
 		try
 		{
-			fileOut = new FileWriter(FILE_OUT);
+			fileOut = new FileWriter(FILE);
 
 			Node<Item> node = inventory.getHead().getNext();
 
