@@ -1,5 +1,5 @@
 
-public class Item
+public class Item implements Comparable<Item>
 {
 	private int itemNumber;
 	private String name;
@@ -135,6 +135,23 @@ public class Item
 	public String toString()
 	{
 		return itemNumber + " " + name + " " + quantity;
+	}
+
+	@Override
+	public int compareTo(Item item)
+	{
+		if (getItemNumber() < item.getItemNumber())
+		{
+			return -1;
+		}
+		else if (getItemNumber() > item.getItemNumber())
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 }
