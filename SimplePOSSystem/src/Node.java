@@ -2,13 +2,15 @@
 public class Node<T>
 {
 
-	private Node<T> next;
+	private Node<T> left;
+	private Node<T> right;
 	private Node<T> prev;
 	private T el;
 
 	public Node()
 	{
-		next = null;
+		left = null;
+		right = null;
 		prev = null;
 		el = null;
 
@@ -16,14 +18,25 @@ public class Node<T>
 
 	public Node(T el)
 	{
-		this.next = null;
+		this.left = null;
+		this.right = null;
 		this.prev = null;
 		this.el = el;
 	}
 
+	public void setRight(Node<T> p)
+	{
+		this.right = p;
+	}
+
+	public void setLeft(Node<T> p)
+	{
+		this.left = p;
+	}
+
 	public void setNext(Node<T> p)
 	{
-		this.next = p;
+		this.right = p;
 	}
 
 	public void setPrev(Node<T> p)
@@ -36,9 +49,19 @@ public class Node<T>
 		this.el = el;
 	}
 
+	public Node<T> getRight()
+	{
+		return this.right;
+	}
+
+	public Node<T> getLeft()
+	{
+		return this.left;
+	}
+
 	public Node<T> getNext()
 	{
-		return this.next;
+		return this.right;
 	}
 
 	public Node<T> getPrev()
