@@ -80,35 +80,35 @@ public class LogInPanel extends JPanel
 			userName = userText.getText();
 			password = passwordText.getText();
 
-			if (source == loginButton)
+			// if (source == loginButton)
+			// {
+			if (user.checkUser(userName, password))
 			{
-				if (user.checkUser(userName, password))
+				if (user.getJobDescription().equalsIgnoreCase("Cashier"))
 				{
-					if (user.getJobDescription().equalsIgnoreCase("Cashier"))
-					{
-						new mainCasherMenu(userName);
-					}
-					else if (user.getJobDescription().equalsIgnoreCase("Manager"))
-					{
-						new mainManagerMenu(userName);
-					}
-					else
-					{
-						System.out.println("Problem with user's job description." + user.getJobDescription());
-					}
-
+					new mainCasherMenu(userName);
+				}
+				else if (user.getJobDescription().equalsIgnoreCase("Manager"))
+				{
+					new mainManagerMenu(userName);
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(null, "Invalid username or password", "Login Error",
-							JOptionPane.ERROR_MESSAGE);
-					userText.setText(null);
-
+					System.out.println("Problem with user's job description." + user.getJobDescription());
 				}
+
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Invalid username or password", "Login Error",
+						JOptionPane.ERROR_MESSAGE);
+				userText.setText(null);
 
 			}
 
 		}
+
+		// }
 	}
 
 	private class checkBoxListener implements ItemListener
