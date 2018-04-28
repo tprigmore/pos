@@ -5,13 +5,15 @@ import java.util.Scanner;
 
 public class Inventory
 {
-	private NodeList<Item> inventory;
+	private Tree<Item> inventory;
 	final String FILE = "Inventory.txt";
 	final String FILE_BAK = "Inventory.txt.bak";
 
 	public Inventory()
 	{
-		this.inventory = new NodeList<Item>();
+		Item item = new Item();
+		item.setItemNumber(1000);
+		this.inventory = new Tree<Item>(item);
 
 		String line;
 		Scanner lineScan, fileScanIn;
@@ -22,7 +24,7 @@ public class Inventory
 			// Read and process each line of the file
 			while (fileScanIn.hasNext())
 			{
-				Item item = new Item();
+				item = new Item();
 
 				line = fileScanIn.nextLine();
 
@@ -37,7 +39,7 @@ public class Inventory
 				item.setQuantity(Integer.parseInt(lineScan.next()));
 				item.setQuantityOnOrder(Integer.parseInt(lineScan.next()));
 				item.setOrderThreshold(Integer.parseInt(lineScan.next()));
-				this.inventory.insertLast(item);
+				this.inventory.insert(item);
 			}
 			fileScanIn.close();
 		}
@@ -69,30 +71,7 @@ public class Inventory
 		{
 			fileOut = new FileWriter(FILE);
 
-			Node<Item> node = inventory.getHead().getNext();
-
-			while (node != null)
-			{
-				String stringOut = "";
-				stringOut += Integer.toString((node.getElement().getItemNumber()));
-				stringOut += ",";
-				stringOut += node.getElement().getName();
-				stringOut += ",";
-				stringOut += Double.toString((node.getElement().getSalePrice()));
-				stringOut += ",";
-				stringOut += Double.toString((node.getElement().getCost()));
-				stringOut += ",";
-				stringOut += node.getElement().getSupplier();
-				stringOut += ",";
-				stringOut += Integer.toString((node.getElement().getQuantity()));
-				stringOut += ",";
-				stringOut += Integer.toString((node.getElement().getQuantityOnOrder()));
-				stringOut += ",";
-				stringOut += Integer.toString((node.getElement().getOrderThreshold()));
-
-				fileOut.write(stringOut);
-
-			}
+			treeTraversal(fileOut, inventory.getRoot());
 
 			fileOut.close();
 		}
@@ -102,16 +81,64 @@ public class Inventory
 		}
 	}
 
+	public Node<Item> treeTraversal(FileWriter fileOut, Node<Item> node)
+	{
+
+		if (node != null)
+		{
+			treeTraversal(fileOut, node.getLeft());
+			writeNode2File(fileOut, node);
+			treeTraversal(fileOut, node.getRight());
+			return node;
+		}
+		else
+		{
+			return null;
+		}
+
+	}
+
+	public void writeNode2File(FileWriter fileOut, Node<Item> node)
+	{
+		try
+		{
+			String stringOut = "";
+			stringOut += Integer.toString((node.getElement().getItemNumber()));
+			stringOut += ",";
+			stringOut += node.getElement().getName();
+			stringOut += ",";
+			stringOut += Double.toString((node.getElement().getSalePrice()));
+			stringOut += ",";
+			stringOut += Double.toString((node.getElement().getCost()));
+			stringOut += ",";
+			stringOut += node.getElement().getSupplier();
+			stringOut += ",";
+			stringOut += Integer.toString((node.getElement().getQuantity()));
+			stringOut += ",";
+			stringOut += Integer.toString((node.getElement().getQuantityOnOrder()));
+			stringOut += ",";
+			stringOut += Integer.toString((node.getElement().getOrderThreshold()));
+			stringOut += "\n";
+
+			fileOut.write(stringOut);
+		}
+		catch (IOException e)
+		{
+			System.out.println("problem opening output file.");
+		}
+
+	}
+
 	public void addItemLast(Item item)
 	{
-		this.inventory.insertLast(item);
+		this.inventory.insert(item);
 	}
 
 	public void addNewItem(int num, String Name, Double SalePrice, Double Cost, String Supplier, int Quantity,
 			int QuantityOnOrder, int Threshold)
 	{
 		Item item = new Item();
-		item.setItemNumber(inventory.last().getItemNumber() + 1);
+		item.setItemNumber(inventory.getMax().getItemNumber() + 1);
 		item.setName(Name);
 		item.setSalePrice(SalePrice);
 		item.setCost(Cost);
@@ -120,19 +147,20 @@ public class Inventory
 		item.setQuantityOnOrder(QuantityOnOrder);
 		item.setOrderThreshold(Threshold);
 
-		this.inventory.insertLast(item);
+		this.inventory.insert(item);
 	}
 
 	public void removeItemByNumber(int itemNumber)
 	{
-		Node<Item> node = inventory.find(itemNumber);
-		if (node != null)
-			this.inventory.remove(node);
+
+		Item item = new Item(itemNumber);
+		this.inventory.removeElement(item);
 	}
 
 	public Item getItem(int itemNumber)
 	{
-		Node<Item> temp = inventory.find(itemNumber);
+		Item item = new Item(itemNumber);
+		Node<Item> temp = inventory.findNode(item);
 
 		if (temp == null)
 		{
@@ -147,7 +175,9 @@ public class Inventory
 	public void updateQuantity(int itemNumber, int count)
 	{
 		int quantity;
-		Node<Item> temp = inventory.find(itemNumber);
+		Item item = new Item(itemNumber);
+
+		Node<Item> temp = inventory.findNode(item);
 
 		if (temp == null)
 		{
@@ -167,34 +197,9 @@ public class Inventory
 		}
 	}
 
-	public Item first()
+	public int getNextItemNumber()
 	{
-		return inventory.first();
-	}
-
-	public Node<Item> getHead()
-	{
-		return inventory.getHead();
-	}
-
-	public Node<Item> getTail()
-	{
-		return inventory.getTail();
-	}
-
-	public Node<Item> getNext(Node<Item> node)
-	{
-		return inventory.getNext(node);
-	}
-
-	public Node<Item> getPrev(Node<Item> node)
-	{
-		return inventory.getPrev(node);
-	}
-
-	public Item last()
-	{
-		return inventory.last();
+		return (int) (Math.random() * 1000) + 1;
 	}
 
 	public boolean isEmpyt()
@@ -204,7 +209,7 @@ public class Inventory
 
 	public int size()
 	{
-		return inventory.size();
+		return inventory.Size();
 	}
 
 	public String toString()
