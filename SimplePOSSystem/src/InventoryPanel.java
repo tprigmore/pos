@@ -27,6 +27,7 @@ public class InventoryPanel extends JPanel
 	private JButton btnAdd;
 	private JButton btnUpdate;
 	private JButton btnRemove;
+	private JButton btnSave;
 
 	private Inventory myInventory;
 
@@ -92,7 +93,7 @@ public class InventoryPanel extends JPanel
 		textAreaItemNumber.setBounds(187, 97, 163, 37);
 		textAreaItemNumber.addActionListener(new TextListener());
 		add(textAreaItemNumber);
-		textAreaItemNumber.setText(inventory.last().getItemNumber() + 1 + " ");
+		textAreaItemNumber.setText(Integer.toString(inventory.getNextItemNumber()));
 
 		textAreaDescription = new JTextField();
 		textAreaDescription.setBounds(187, 193, 648, 37);
@@ -127,20 +128,26 @@ public class InventoryPanel extends JPanel
 		btnAdd = new JButton("Add");
 		btnAdd.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnAdd.addActionListener(new ButtonListener());
-		btnAdd.setBounds(29, 604, 163, 47);
+		btnAdd.setBounds(30, 604, 163, 47);
 		add(btnAdd);
 
 		btnRemove = new JButton("Remove");
 		btnRemove.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnRemove.addActionListener(new ButtonListener());
-		btnRemove.setBounds(222, 604, 163, 47);
+		btnRemove.setBounds(230, 604, 163, 47);
 		add(btnRemove);
 
 		btnUpdate = new JButton("Update");
 		btnUpdate.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnUpdate.addActionListener(new ButtonListener());
-		btnUpdate.setBounds(410, 604, 163, 47);
+		btnUpdate.setBounds(430, 604, 163, 47);
 		add(btnUpdate);
+
+		btnSave = new JButton("Save");
+		btnSave.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnSave.addActionListener(new ButtonListener());
+		btnSave.setBounds(630, 604, 163, 47);
+		add(btnSave);
 
 	}
 
@@ -253,9 +260,80 @@ public class InventoryPanel extends JPanel
 			}
 			else if (source == btnUpdate)
 			{
+				try
+				{
+					itemNumber = Integer.parseInt(textAreaItemNumber.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaItemNumber.setForeground(Color.red);
+				}
+
+				name = textAreaDescription.getText();
+
+				try
+				{
+					quantity = Integer.parseInt(textAreaQuantity.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaQuantity.setForeground(Color.red);
+				}
+
+				try
+				{
+					cost = Double.parseDouble(textAreaCost.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaCost.setForeground(Color.red);
+				}
+
+				String supplier = textAreaSupplier.getText();
+
+				try
+				{
+					salePrice = Double.parseDouble(textAreaSalesPrice.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaSalesPrice.setForeground(Color.red);
+				}
+
+				try
+				{
+					quantityOnOrder = Integer.parseInt(textAreaQuantityOnOrder.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaQuantityOnOrder.setForeground(Color.red);
+				}
+
+				try
+				{
+					threshold = Integer.parseInt(textAreaThreshold.getText());
+				}
+				catch (NumberFormatException e)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaThreshold.setForeground(Color.red);
+				}
+
+				myInventory.addNewItem(itemNumber, name, salePrice, cost, supplier, quantity, quantityOnOrder,
+						threshold);
+			}
+			else if (source == btnSave)
+			{
+				myInventory.writeInventoryFile();
 			}
 			else
 			{
+				System.out.println("This should never print.  Check inventory buttons if it does.");
 			}
 
 		}
@@ -268,29 +346,38 @@ public class InventoryPanel extends JPanel
 		{
 
 			int itemNumber = 0;
+			Item item = null;
 			textAreaItemNumber.setForeground(Color.black);
 
 			try
 			{
 				String text = textAreaItemNumber.getText();
-				itemNumber = Integer.parseInt(text);
+				if (text != "")
+				{
+					itemNumber = Integer.parseInt(text);
+					item = myInventory.getItem(itemNumber);
+					if (item == null)
+					{
+						clearTextAreas();
+						textAreaItemNumber.setText(Integer.toString(itemNumber));
+					}
+					else
+					{
+						setTextAreas(item);
+					}
+
+				}
+				else
+				{
+					clearTextAreas();
+					int number = myInventory.getNextItemNumber();
+					textAreaItemNumber.setText(Integer.toString(number));
+				}
 			}
 			catch (NumberFormatException e)
 			{
 				Toolkit.getDefaultToolkit().beep();
 				textAreaItemNumber.setForeground(Color.red);
-			}
-
-			Item item = myInventory.getItem(itemNumber);
-			if (item == null)
-			{
-				clearTextAreas();
-				int number = myInventory.last().getItemNumber() + 1;
-				textAreaItemNumber.setText(Integer.toString(number));
-			}
-			else
-			{
-				setTextAreas(item);
 			}
 
 		}
@@ -309,7 +396,7 @@ public class InventoryPanel extends JPanel
 
 	private void clearTextAreas()
 	{
-		textAreaItemNumber.setText(myInventory.last().getItemNumber() + 1 + " ");
+		textAreaItemNumber.setText((Integer.toString(myInventory.getNextItemNumber())));
 		textAreaDescription.setText("");
 		textAreaQuantity.setText("0");
 		textAreaCost.setText("0.0");
