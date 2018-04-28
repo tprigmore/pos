@@ -88,7 +88,6 @@ public class InventoryPanel extends JPanel
 		add(lblThresholdToOrder);
 
 		// JTextAreas
-
 		textAreaItemNumber = new JTextField();
 		textAreaItemNumber.setBounds(187, 97, 163, 37);
 		textAreaItemNumber.addActionListener(new TextListener());
