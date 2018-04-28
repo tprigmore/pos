@@ -1,5 +1,5 @@
 
-public class Node<T>
+public class Node<T> implements Comparable<T>
 {
 
 	private Node<T> left;
@@ -82,5 +82,10 @@ public class Node<T>
 	public String toString()
 	{
 		return this.el.toString() + "\n";
+	}
+
+	public int compareTo(Object obj)
+	{
+		return ((Comparable<T>) this.el).compareTo((T) obj);
 	}
 }
