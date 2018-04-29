@@ -94,6 +94,13 @@ public class Tree<T>
 		if (!(element instanceof Comparable))
 			System.out.println("Element to insert is not Comparable.");
 
+		if (root.getElement() == null)
+		{
+			root.setElement(element);
+			count++;
+			return true;
+		}
+
 		while (current != null)
 		{
 			if (((Comparable<T>) current.getElement()).compareTo(element) < 0)
