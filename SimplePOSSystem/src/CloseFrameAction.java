@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 
 public class CloseFrameAction extends JFrame
 {
-	public CloseFrameAction(String str, Inventory inventory)
+	public CloseFrameAction(String str, Inventory inventory, Drawer drawer)
 	{
 		setTitle(str);
 
