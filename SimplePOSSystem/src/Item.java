@@ -113,7 +113,7 @@ public class Item implements Comparable<Item>
 
 	public void setQuantityOnOrder(int quantityOnOrder)
 	{
-		this.quantityOnOrder = quantity;
+		this.quantityOnOrder = quantityOnOrder;
 	}
 
 	public int getOrderThreshold()
