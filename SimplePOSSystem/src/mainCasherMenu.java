@@ -10,11 +10,13 @@ public class mainCasherMenu
 
 	public mainCasherMenu(String userName)
 	{
-		JFrame frame = new JFrame("Casher System - Welcome " + userName);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Inventory inventory = new Inventory();
+		Drawer drawer = new Drawer(userName);
+
+		JFrame frame = new CloseFrameAction(("Casher System - Welcome " + userName), inventory, drawer);
 
 		JTabbedPane tp = new JTabbedPane();
-		tp.addTab("Sales", new SalePanel());
+		tp.addTab("Sales", new SalePanel(inventory, drawer));
 		tp.addTab("Return", new ReturnPanel());
 
 		frame.getContentPane().add(tp);

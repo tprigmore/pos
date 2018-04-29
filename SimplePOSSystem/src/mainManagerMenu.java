@@ -10,14 +10,14 @@ public class mainManagerMenu
 
 	public mainManagerMenu(String userName)
 	{
-		JFrame frame = new JFrame("Casher System - Welcome " + userName);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		Inventory inventory = new Inventory();
+		Drawer drawer = new Drawer(userName);
+
+		JFrame frame = new CloseFrameAction(("Manager System - Welcome " + userName), inventory, drawer);
+		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JTabbedPane tp = new JTabbedPane();
-		tp.addTab("Sales", new SalePanel());
-		tp.addTab("Return", new ReturnPanel());
+		tp.addTab("Sales", new SalePanel(inventory, drawer));
 		tp.addTab("Inventory", new InventoryPanel(inventory));
 		tp.addTab("Orders", new OrderPanel());
 
