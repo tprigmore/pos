@@ -9,7 +9,7 @@ public class SalePanel extends JPanel
 	public final int WIDTH = 1024;
 	public final int HEIGHT = 800;
 
-	public SalePanel()
+	public SalePanel(Inventory inventory, Drawer drawer)
 	{
 
 		setBackground(Color.white);
