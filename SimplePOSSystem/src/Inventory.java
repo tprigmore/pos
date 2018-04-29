@@ -11,9 +11,7 @@ public class Inventory
 
 	public Inventory()
 	{
-		Item item = new Item();
-		item.setItemNumber(1000);
-		this.inventory = new Tree<Item>(item);
+		this.inventory = new Tree<Item>();
 
 		String line;
 		Scanner lineScan, fileScanIn;
@@ -24,7 +22,7 @@ public class Inventory
 			// Read and process each line of the file
 			while (fileScanIn.hasNext())
 			{
-				item = new Item();
+				Item item = new Item();
 
 				line = fileScanIn.nextLine();
 
@@ -138,7 +136,7 @@ public class Inventory
 			int QuantityOnOrder, int Threshold)
 	{
 		Item item = new Item();
-		item.setItemNumber(inventory.getMax().getItemNumber() + 1);
+		item.setItemNumber(num);
 		item.setName(Name);
 		item.setSalePrice(SalePrice);
 		item.setCost(Cost);
@@ -153,7 +151,7 @@ public class Inventory
 	public void removeItemByNumber(int itemNumber)
 	{
 
-		Item item = new Item(itemNumber);
+		Item item = getItem(itemNumber);
 		this.inventory.removeElement(item);
 	}
 
@@ -194,6 +192,29 @@ public class Inventory
 			{
 				temp.getElement().setQuantity(0);
 			}
+		}
+	}
+
+	public void updateItem(int itemNumber, String name, double salePrice, double cost, String supplier, int quantity,
+			int quantityOnOrder, int threshold)
+	{
+		Item item = new Item(itemNumber);
+
+		Node<Item> temp = inventory.findNode(item);
+
+		if (temp == null)
+		{
+			System.out.println("Error: item not found in inventory");
+		}
+		else
+		{
+			temp.getElement().setName(name);
+			temp.getElement().setSalePrice(salePrice);
+			temp.getElement().setCost(cost);
+			temp.getElement().setSupplier(supplier);
+			temp.getElement().setQuantity(quantity);
+			temp.getElement().setQuantityOnOrder(quantityOnOrder);
+			temp.getElement().setOrderThreshold(threshold);
 		}
 	}
 
