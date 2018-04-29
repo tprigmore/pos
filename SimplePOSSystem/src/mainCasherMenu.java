@@ -17,7 +17,7 @@ public class mainCasherMenu
 
 		JTabbedPane tp = new JTabbedPane();
 		tp.addTab("Sales", new SalePanel(inventory, drawer));
-		tp.addTab("Return", new ReturnPanel());
+		// tp.addTab("Return", new ReturnPanel());
 
 		frame.getContentPane().add(tp);
 
