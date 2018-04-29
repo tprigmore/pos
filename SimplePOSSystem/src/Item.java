@@ -126,10 +126,15 @@ public class Item implements Comparable<Item>
 		this.orderThreshold = quantity;
 	}
 
-	public boolean equals(Object num)
+	// public boolean equals(Object num)
+	// {
+	//
+	// return itemNumber == (int) num;
+	// }
+	public boolean equals(Object item)
 	{
 
-		return itemNumber == (int) num;
+		return itemNumber == ((Item) item).getItemNumber();
 	}
 
 	public String toString()
