@@ -171,6 +171,7 @@ public class InventoryPanel extends JPanel
 			textAreaItemNumber.setForeground(Color.black);
 
 			Object source = event.getSource();
+			String text = "";
 
 			if (source == btnAdd)
 			{
@@ -239,8 +240,18 @@ public class InventoryPanel extends JPanel
 					textAreaThreshold.setForeground(Color.red);
 				}
 
-				myInventory.addNewItem(itemNumber, name, salePrice, cost, supplier, quantity, quantityOnOrder,
-						threshold);
+				if (myInventory.getItem(itemNumber) == null)
+				{
+
+					myInventory.addNewItem(itemNumber, name, salePrice, cost, supplier, quantity, quantityOnOrder,
+							threshold);
+				}
+				else
+				{
+					myInventory.updateItem(itemNumber, name, salePrice, cost, supplier, quantity, quantityOnOrder,
+							threshold);
+				}
+
 			}
 
 			else if (source == btnRemove)
@@ -258,6 +269,7 @@ public class InventoryPanel extends JPanel
 				myInventory.removeItemByNumber(itemNumber);
 				clearTextAreas();
 			}
+
 			else if (source == btnUpdate)
 			{
 				try
@@ -323,10 +335,18 @@ public class InventoryPanel extends JPanel
 					Toolkit.getDefaultToolkit().beep();
 					textAreaThreshold.setForeground(Color.red);
 				}
-
-				myInventory.addNewItem(itemNumber, name, salePrice, cost, supplier, quantity, quantityOnOrder,
-						threshold);
+				if (myInventory.getItem(itemNumber) == null)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					textAreaItemNumber.setForeground(Color.red);
+				}
+				else
+				{
+					myInventory.updateItem(itemNumber, name, salePrice, cost, supplier, quantity, quantityOnOrder,
+							threshold);
+				}
 			}
+
 			else if (source == btnSave)
 			{
 				myInventory.writeInventoryFile();
