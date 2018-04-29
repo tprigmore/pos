@@ -8,7 +8,7 @@ public class SimplePOSSystem
 		User user = new User();
 
 		JFrame frame = new JFrame("Point-of-Sale System");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 		frame.setSize(300, 210);
 
