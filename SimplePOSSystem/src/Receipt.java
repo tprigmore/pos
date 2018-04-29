@@ -1,134 +1,55 @@
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class Receipt
 {
-	private int receiptNumber;
-	private NodeList<Item> listOfItems; // Array of <T> may be better?
-										// Say 10000 items?
-	private double tax;
-	private double total;
-	private long dateTime;
-	private int registerNumber;
-	private String cashier;
-	private int count;
-	private String type;
+	private String receiptNumber;
+	private String userName;
+	private Date transactionTime;
+	private String dateStr;
+	private final DateFormat DATEFORM = new SimpleDateFormat("MM/dd/yy hh:mm:ss aa");
+	private ArrayList<TransactionItem> List;
+	private Double amtTotal;
+	private Double taxTotal;
+	private Double subTotal;
 
-	public Receipt()
+	private NumberFormat fmt = NumberFormat.getCurrencyInstance();
+
+	public Receipt(String userName, ArrayList<TransactionItem> List, Double amtTotal, Double taxTotal, Double subTotal)
 	{
+		this.userName = userName;
+		this.List = List;
+		this.amtTotal = amtTotal;
+		this.taxTotal = taxTotal;
+		this.subTotal = subTotal;
 
-	}
+		transactionTime = new Date();
+		dateStr = DATEFORM.format(transactionTime);
 
-	public Receipt(int num)
-	{
-		this.receiptNumber = num;
-	}
+		receiptNumber = userName + "_" + dateStr;
 
-	public Receipt(int receiptNumber, NodeList<Item> listOfItems, double tax, double total, long dateTime,
-			int registerNumber, String cashier, String type)
-	{
-		super();
-		this.receiptNumber = receiptNumber;
-		this.listOfItems = listOfItems;
-		this.tax = tax;
-		this.total = total;
-		this.dateTime = dateTime;
-		this.registerNumber = registerNumber;
-		this.cashier = cashier;
-		this.type = type;
-	}
-
-	public int getReceiptNumber()
-	{
-		return receiptNumber;
-	}
-
-	public void setReceiptNumber(int receiptNumber)
-	{
-		this.receiptNumber = receiptNumber;
-	}
-
-	public Item getListOfItems()
-	{
-		return listOfItems.first();
-	}
-
-	public void setListOfItems(Item item)
-	{
-		this.listOfItems.insertFirst(item);
-	}
-
-	public double getTax()
-	{
-		return tax;
-	}
-
-	public void setTax(double tax)
-	{
-		this.tax = tax;
-	}
-
-	public double getTotal()
-	{
-		return total;
-	}
-
-	public void setTotal(double total)
-	{
-		this.total = total;
-	}
-
-	public long getDateTime()
-	{
-		return dateTime;
-	}
-
-	public void setDateTime(long dateTime)
-	{
-		this.dateTime = dateTime;
-	}
-
-	public int getRegisterNumber()
-	{
-		return registerNumber;
-	}
-
-	public void setRegisterNumber(int registerNumber)
-	{
-		this.registerNumber = registerNumber;
-	}
-
-	public String getCashier()
-	{
-		return cashier;
-	}
-
-	public void setCashier(String cashier)
-	{
-		this.cashier = cashier;
-	}
-
-	public int getCount()
-	{
-		return count;
-	}
-
-	public void setCount(int count)
-	{
-		this.count = count;
-	}
-
-	public String getType()
-	{
-		return type;
-	}
-
-	public void setType(String type)
-	{
-		this.type = type;
 	}
 
 	public String toString()
 	{
-		return ""; // Needs to be figured out
+		String result = "Receipt Number: " + receiptNumber + "\n\nCashier: " + userName + "\n" + "Date: " + dateStr
+				+ "\n\n";
+
+		result += String.format("%-15s%-13s%-15s%-1s", "Item Number", "Item Name", "Qty & Price", "Item Subtotal")
+				+ "\n";
+
+		for (int i = 0; i < List.size(); i++)
+		{
+			result += List.get(i).toString() + "\n";
+		}
+
+		result += "\n" + "Subtotal: " + fmt.format(subTotal) + "\nTax Total: " + fmt.format(taxTotal) + "\nTotal: "
+				+ fmt.format(amtTotal);
+
+		return result;
 	}
 
 }
