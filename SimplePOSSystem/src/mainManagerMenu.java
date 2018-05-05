@@ -20,6 +20,7 @@ public class mainManagerMenu
 		tp.addTab("Sales", new SalePanel(inventory, drawer));
 		tp.addTab("Inventory", new InventoryPanel(inventory));
 		tp.addTab("Orders", new OrderPanel());
+		tp.addTab("Reports", new ReportPanel(inventory));
 
 		frame.getContentPane().add(tp);
 
