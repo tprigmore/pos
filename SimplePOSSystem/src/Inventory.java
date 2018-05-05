@@ -8,6 +8,7 @@ public class Inventory
 	private Tree<Item> inventory;
 	final String FILE = "Inventory.txt";
 	final String FILE_BAK = "Inventory.txt.bak";
+	private String bigString = "";
 
 	public Inventory()
 	{
@@ -218,6 +219,11 @@ public class Inventory
 		}
 	}
 
+	public Node<Item> getRoot()
+	{
+		return inventory.getRoot();
+	}
+
 	public int getNextItemNumber()
 	{
 		return (int) (Math.random() * 1000) + 1;
@@ -231,6 +237,25 @@ public class Inventory
 	public int size()
 	{
 		return inventory.Size();
+	}
+
+	public String reportTraversal(Node<Item> node)
+	{
+
+		if (node != null)
+		{
+			reportTraversal(node.getLeft());
+			bigString += node.getElement().reportItem();
+			// System.out.println(node.getElement().reportItem());
+
+			reportTraversal(node.getRight());
+			return bigString;
+		}
+		else
+		{
+			return null;
+		}
+
 	}
 
 	public String toString()
