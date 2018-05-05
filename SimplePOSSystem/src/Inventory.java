@@ -1,13 +1,14 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Inventory
 {
 	private Tree<Item> inventory;
 	final String FILE = "Inventory.txt";
-	final String FILE_BAK = "Inventory.txt.bak";
 	private String bigString = "";
 
 	public Inventory()
@@ -50,9 +51,14 @@ public class Inventory
 
 	public void writeInventoryFile()
 	{
+		SimpleDateFormat ft = new SimpleDateFormat("yyyy_MM_dd'_'HH_mm");
+		Date dNow = new Date();
+		String tempDate = ft.format(dNow);
+		// System.out.println("Current Date: " + tempDate);
+
 		FileWriter fileOut;
 		File f = new File(FILE);
-		File fbak = new File(FILE + ".bak");
+		File fbak = new File("Inventory" + tempDate + ".txt");
 
 		// If FILE exists, rename it FILE + _date_time.bak
 		boolean isFileRenamed = f.renameTo(fbak);
@@ -237,6 +243,12 @@ public class Inventory
 	public int size()
 	{
 		return inventory.Size();
+	}
+
+	public String reportInventory()
+	{
+		bigString = "";
+		return reportTraversal((inventory.getRoot()));
 	}
 
 	public String reportTraversal(Node<Item> node)
