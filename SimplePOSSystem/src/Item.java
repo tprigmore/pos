@@ -137,6 +137,15 @@ public class Item implements Comparable<Item>
 		return itemNumber == ((Item) item).getItemNumber();
 	}
 
+	public String reportItem()
+	{
+		String returnString = String.format("Item #: %-10d Description: %-50s\n  Quantity on hand: %-6d", itemNumber,
+				name, quantity);
+		returnString += String.format("Quantity on Order: %-10d Order threshold: %-10d\n\n", quantityOnOrder,
+				orderThreshold);
+		return returnString;
+	}
+
 	public String toString()
 	{
 		return itemNumber + " " + name + " " + quantity;
