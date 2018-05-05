@@ -22,6 +22,7 @@ public class SalePanel extends JPanel
 	private Double subTotal;
 	private Inventory inv;
 	String printedList;
+	String listOfReceipts;
 	private Drawer drawer;
 
 	JLabel TaxVariableLabel, TotalVariableLabel, SubtotalVariableLabel;
@@ -30,7 +31,7 @@ public class SalePanel extends JPanel
 
 	JTextField textAreaItemNumber, textAreaQuantity;
 
-	JButton buttonAddItem, buttonRemoveItem, buttonRemoveAll, buttonCompleteOr;
+	JButton buttonAddItem, buttonRemoveItem, buttonRemoveAll, buttonCompleteOr, btnReturn;
 
 	private NumberFormat fmt = NumberFormat.getCurrencyInstance();
 
@@ -38,6 +39,7 @@ public class SalePanel extends JPanel
 	{
 		this.inv = inv;
 		this.drawer = drawer;
+		this.listOfReceipts = "";
 		refresh();
 		initialize();
 
@@ -54,6 +56,18 @@ public class SalePanel extends JPanel
 
 	public void addTransItem(int itemNumber, int qty)
 	{
+		Item item = inv.getItem(itemNumber);
+		TransactionItem transTemp = new TransactionItem(item, qty);
+		List.add(transTemp);
+		subTotal = subTotal + item.getSalePrice() * qty;
+		taxTotal = subTotal * .07;
+		amtTotal = subTotal + taxTotal;
+		printedList = ListToString();
+	}
+
+	public void ReturnTransItem(int itemNumber, int qty)
+	{
+		qty = -qty;
 		Item item = inv.getItem(itemNumber);
 		TransactionItem transTemp = new TransactionItem(item, qty);
 		List.add(transTemp);
@@ -87,6 +101,18 @@ public class SalePanel extends JPanel
 		printedList = ListToString();
 	}
 
+	public void updateInventory()
+	{
+		int tempItemNum;
+		int tempQty;
+		for (int i = 0; i < List.size(); i++)
+		{
+			tempItemNum = List.get(i).getItem().getItemNumber();
+			tempQty = List.get(i).getQty();
+			inv.updateQuantity(tempItemNum, tempQty);
+		}
+	}
+
 	public String ListToString()
 	{
 		String result = String.format("%-15s%-13s%-15s%-1s", "Item Number", "Item Name", "Qty & Price", "Item Subtotal")
@@ -106,8 +132,6 @@ public class SalePanel extends JPanel
 	private void initialize()
 	{
 
-		// Panels
-		// JPanel panelMain = new JPanel();
 		setBounds(0, 0, WIDTH, HEIGHT);
 		setLayout(null);
 
@@ -190,7 +214,7 @@ public class SalePanel extends JPanel
 		buttonRemoveAll = new JButton("Remove All");
 		buttonRemoveAll.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		buttonRemoveAll.addActionListener(new RemoveAllListener());
-		buttonRemoveAll.setBounds(646, 444, 321, 65);
+		buttonRemoveAll.setBounds(646, 542, 321, 65);
 		add(buttonRemoveAll);
 
 		buttonCompleteOr = new JButton("Complete Order");
@@ -198,6 +222,12 @@ public class SalePanel extends JPanel
 		buttonCompleteOr.addActionListener(new CompleteOrListener());
 		buttonCompleteOr.setBounds(646, 356, 321, 65);
 		add(buttonCompleteOr);
+
+		btnReturn = new JButton("Return");
+		btnReturn.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnReturn.addActionListener(new ReturnListener());
+		btnReturn.setBounds(646, 450, 321, 65);
+		add(btnReturn);
 
 	}
 
@@ -217,6 +247,33 @@ public class SalePanel extends JPanel
 				Integer quantity = Integer.parseInt(textAreaQuantity.getText());
 
 				addTransItem(itemNum, quantity);
+
+				textAreaPrint.setText(ListToString());
+				TotalVariableLabel.setText(fmt.format(amtTotal));
+				TaxVariableLabel.setText(fmt.format(taxTotal));
+				SubtotalVariableLabel.setText(fmt.format(subTotal));
+
+			}
+
+		}
+	}
+
+	private class ReturnListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+
+			if (textAreaItemNumber.getText().equals("") || textAreaQuantity.getText().equals(""))
+			{
+				System.out.println("Enter item number and quantity.");
+			}
+			else
+			{
+
+				Integer itemNum = Integer.parseInt(textAreaItemNumber.getText());
+				Integer quantity = Integer.parseInt(textAreaQuantity.getText());
+
+				ReturnTransItem(itemNum, quantity);
 
 				textAreaPrint.setText(ListToString());
 				TotalVariableLabel.setText(fmt.format(amtTotal));
@@ -264,10 +321,9 @@ public class SalePanel extends JPanel
 		{
 			String userName = drawer.username;
 			Receipt receipt = new Receipt(userName, List, amtTotal, taxTotal, subTotal);
-			System.out.println(receipt); // for testing delete later
+			drawer.addReciept(receipt);
 			drawer.processTransaction(amtTotal);
-
-			// update inventory
+			updateInventory();
 
 			refresh();
 

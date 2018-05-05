@@ -1,0 +1,17 @@
+Shift Start Time: 05/05/18 05:40:01 PM End Time: 05/05/18 05:40:23 PM
+User: michael
+Register Number: 1
+Total: $8.52
+********************************************************
+Receipt Number: michael_05/05/18 05:40:16 PM
+
+Cashier: michael
+Date: 05/05/18 05:40:16 PM
+
+Item Number    Item Name    Qty & Price    Item Subtotal
+1              Apple        2 @ $0.99      $1.98
+4              Milk 1 gallon2 @ $2.99      $5.98
+
+Subtotal: $7.96
+Tax Total: $0.56
+Total: $8.52

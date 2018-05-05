@@ -15,6 +15,7 @@ public class CloseFrameAction extends JFrame
 			public void windowClosing(WindowEvent e)
 			{
 				inventory.writeInventoryFile();
+				drawer.endShift();
 				System.out.println("This is it - goodbye crule world");
 				System.exit(0);
 			}

@@ -35,8 +35,9 @@ public class Receipt
 
 	public String toString()
 	{
-		String result = "Receipt Number: " + receiptNumber + "\n\nCashier: " + userName + "\n" + "Date: " + dateStr
-				+ "\n\n";
+		String result = "********************************************************\n";
+
+		result += "Receipt Number: " + receiptNumber + "\n\nCashier: " + userName + "\n" + "Date: " + dateStr + "\n\n";
 
 		result += String.format("%-15s%-13s%-15s%-1s", "Item Number", "Item Name", "Qty & Price", "Item Subtotal")
 				+ "\n";
@@ -48,6 +49,8 @@ public class Receipt
 
 		result += "\n" + "Subtotal: " + fmt.format(subTotal) + "\nTax Total: " + fmt.format(taxTotal) + "\nTotal: "
 				+ fmt.format(amtTotal);
+
+		result += "\n";
 
 		return result;
 	}
