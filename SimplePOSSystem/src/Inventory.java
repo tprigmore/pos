@@ -193,6 +193,7 @@ public class Inventory
 	public void updateQuantity(int itemNumber, int count)
 	{
 		int quantity;
+		int quantityThreshod;
 		Item item = new Item(itemNumber);
 
 		Node<Item> temp = inventory.findNode(item);
@@ -211,6 +212,37 @@ public class Inventory
 			else
 			{
 				temp.getElement().setQuantity(0);
+			}
+			if ((temp.getElement().getQuantity() < temp.getElement().getOrderThreshold())
+					&& (temp.getElement().getQuantityOnOrder() == 0))
+			{
+				temp.getElement().setQuantityOnOrder(temp.getElement().getOrderThreshold() * 2);
+
+			}
+		}
+	}
+
+	public void updateQuantityOnOrder(int itemNumber, int count)
+	{
+		int quantity;
+		Item item = new Item(itemNumber);
+
+		Node<Item> temp = inventory.findNode(item);
+
+		if (temp == null)
+		{
+			System.out.println("Error: item not found in inventory");
+		}
+		else
+		{
+			quantity = temp.getElement().getQuantityOnOrder();
+			if ((quantity - count) >= 0)
+			{
+				temp.getElement().setQuantityOnOrder(quantity - count);
+			}
+			else
+			{
+				temp.getElement().setQuantityOnOrder(0);
 			}
 		}
 	}
@@ -275,6 +307,29 @@ public class Inventory
 
 			reportTraversal(node.getRight());
 			return bigString;
+		}
+		else
+		{
+			return null;
+		}
+
+	}
+
+	public NodeList<Item> getCurrentInventory()
+	{
+		return buildNodeList(inventory.getRoot());
+	}
+
+	public NodeList<Item> buildNodeList(Node<Item> node)
+	{
+		NodeList<Item> list = new NodeList<Item>();
+
+		if (node != null)
+		{
+			reportTraversal(node.getLeft());
+			list.insertLast(node.getElement());
+			reportTraversal(node.getRight());
+			return list;
 		}
 		else
 		{
