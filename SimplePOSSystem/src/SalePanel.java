@@ -1,5 +1,7 @@
 
+import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
@@ -8,8 +10,10 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 public class SalePanel extends JPanel
 {
@@ -115,7 +119,7 @@ public class SalePanel extends JPanel
 
 	public String ListToString()
 	{
-		String result = String.format("%-15s%-13s%-15s%-1s", "Item Number", "Item Name", "Qty & Price", "Item Subtotal")
+		String result = String.format("%-15s%-23s%-17s%-1s", "Item Number", "Item Name", "Qty & Price", "Item Subtotal")
 				+ "\n";
 
 		for (int i = 0; i < List.size(); i++)
@@ -143,12 +147,12 @@ public class SalePanel extends JPanel
 
 		JLabel labelItemNumber = new JLabel("Item Number");
 		labelItemNumber.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		labelItemNumber.setBounds(646, 59, 139, 29);
+		labelItemNumber.setBounds(714, 59, 114, 29);
 		add(labelItemNumber);
 
 		JLabel labelQuantity = new JLabel("Quantity");
 		labelQuantity.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		labelQuantity.setBounds(646, 111, 84, 29);
+		labelQuantity.setBounds(714, 111, 84, 29);
 		add(labelQuantity);
 
 		JLabel labelSubTotal = new JLabel("Subtotal:");
@@ -181,52 +185,56 @@ public class SalePanel extends JPanel
 		// Text Fields
 
 		textAreaItemNumber = new JTextField();
-		textAreaItemNumber.setBounds(795, 62, 120, 29);
+		textAreaItemNumber.setBounds(862, 62, 120, 29);
 		add(textAreaItemNumber);
 
 		textAreaQuantity = new JTextField();
-		textAreaQuantity.setBounds(795, 114, 120, 29);
+		textAreaQuantity.setBounds(862, 114, 120, 29);
 		add(textAreaQuantity);
 
 		// Text area
 		textAreaPrint = new JTextArea(25, 40);
-		textAreaPrint.setLocation(20, 52);
-		textAreaPrint.setSize(544, 436);
+
 		add(textAreaPrint);
 		textAreaPrint.setFont(new Font("Courier New", Font.PLAIN, 15));
 		textAreaPrint.setText(
-				String.format("%-15s%-13s%-15s%-1s", "Item Number", "Item Name", "Qty & Price", "Item Subtotal")
+				String.format("%-15s%-23s%-17s%-1s", "Item Number", "Item Name", "Qty & Price", "Item Subtotal")
 						+ "\n");
+
+		JScrollPane scroll = new JScrollPane(textAreaPrint);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setBounds(20, 52, 638, 436);
+		add(scroll, BorderLayout.EAST);
 
 		// Buttons
 		buttonAddItem = new JButton("Add Item");
 		buttonAddItem.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		buttonAddItem.addActionListener(new AddItemListener());
-		buttonAddItem.setBounds(646, 172, 321, 65);
+		buttonAddItem.setBounds(703, 172, 294, 65);
 		add(buttonAddItem);
 
 		buttonRemoveItem = new JButton("Remove Item");
 		buttonRemoveItem.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		buttonRemoveItem.addActionListener(new RemoveItemListener());
-		buttonRemoveItem.setBounds(646, 267, 321, 65);
+		buttonRemoveItem.setBounds(703, 362, 294, 65);
 		add(buttonRemoveItem);
 
 		buttonRemoveAll = new JButton("Remove All");
 		buttonRemoveAll.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		buttonRemoveAll.addActionListener(new RemoveAllListener());
-		buttonRemoveAll.setBounds(646, 542, 321, 65);
+		buttonRemoveAll.setBounds(703, 451, 294, 65);
 		add(buttonRemoveAll);
 
 		buttonCompleteOr = new JButton("Complete Order");
 		buttonCompleteOr.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		buttonCompleteOr.addActionListener(new CompleteOrListener());
-		buttonCompleteOr.setBounds(646, 356, 321, 65);
+		buttonCompleteOr.setBounds(703, 542, 294, 70);
 		add(buttonCompleteOr);
 
 		btnReturn = new JButton("Return");
 		btnReturn.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnReturn.addActionListener(new ReturnListener());
-		btnReturn.setBounds(646, 450, 321, 65);
+		btnReturn.setBounds(703, 268, 295, 65);
 		add(btnReturn);
 
 	}
@@ -236,26 +244,30 @@ public class SalePanel extends JPanel
 		public void actionPerformed(ActionEvent event)
 		{
 
-			if (textAreaItemNumber.getText().equals("") || textAreaQuantity.getText().equals(""))
+			try
 			{
-				System.out.println("Enter item number and quantity.");
-			}
-			else
-			{
-
 				Integer itemNum = Integer.parseInt(textAreaItemNumber.getText());
 				Integer quantity = Integer.parseInt(textAreaQuantity.getText());
 
+				if (notPositiveInteger(itemNum) || notPositiveInteger(quantity))
+				{
+					throw new Exception();
+				}
 				addTransItem(itemNum, quantity);
 
 				textAreaPrint.setText(ListToString());
 				TotalVariableLabel.setText(fmt.format(amtTotal));
 				TaxVariableLabel.setText(fmt.format(taxTotal));
 				SubtotalVariableLabel.setText(fmt.format(subTotal));
+			}
+			catch (Exception e)
+			{
+				Toolkit.getDefaultToolkit().beep();
 
 			}
 
 		}
+
 	}
 
 	private class ReturnListener implements ActionListener
@@ -263,22 +275,27 @@ public class SalePanel extends JPanel
 		public void actionPerformed(ActionEvent event)
 		{
 
-			if (textAreaItemNumber.getText().equals("") || textAreaQuantity.getText().equals(""))
-			{
-				System.out.println("Enter item number and quantity.");
-			}
-			else
+			try
 			{
 
 				Integer itemNum = Integer.parseInt(textAreaItemNumber.getText());
 				Integer quantity = Integer.parseInt(textAreaQuantity.getText());
 
+				if (notPositiveInteger(itemNum) || notPositiveInteger(quantity))
+				{
+					throw new Exception();
+				}
 				ReturnTransItem(itemNum, quantity);
 
 				textAreaPrint.setText(ListToString());
 				TotalVariableLabel.setText(fmt.format(amtTotal));
 				TaxVariableLabel.setText(fmt.format(taxTotal));
 				SubtotalVariableLabel.setText(fmt.format(subTotal));
+
+			}
+			catch (Exception e)
+			{
+				Toolkit.getDefaultToolkit().beep();
 
 			}
 
@@ -289,15 +306,30 @@ public class SalePanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			Integer itemNum = Integer.parseInt(textAreaItemNumber.getText());
+			try
+			{
+				Integer itemNum = Integer.parseInt(textAreaItemNumber.getText());
+				if (notPositiveInteger(itemNum))
+				{
+					throw new Exception();
+				}
+				removeTransItem(itemNum);
 
-			removeTransItem(itemNum);
+				textAreaPrint.setText(ListToString());
+				TotalVariableLabel.setText(fmt.format(amtTotal));
+				TaxVariableLabel.setText(fmt.format(taxTotal));
+				SubtotalVariableLabel.setText(fmt.format(subTotal));
+				if (List.isEmpty())
+				{
+					printedList = "";
+				}
 
-			textAreaPrint.setText(ListToString());
-			TotalVariableLabel.setText(fmt.format(amtTotal));
-			TaxVariableLabel.setText(fmt.format(taxTotal));
-			SubtotalVariableLabel.setText(fmt.format(subTotal));
+			}
+			catch (Exception e)
+			{
+				Toolkit.getDefaultToolkit().beep();
 
+			}
 		}
 	}
 
@@ -319,11 +351,23 @@ public class SalePanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			String userName = drawer.username;
-			Receipt receipt = new Receipt(userName, List, amtTotal, taxTotal, subTotal);
-			drawer.addReciept(receipt);
-			drawer.processTransaction(amtTotal);
-			updateInventory();
+			try
+			{
+				if (printedList.equals(""))
+				{
+					throw new Exception();
+				}
+				String userName = drawer.username;
+				Receipt receipt = new Receipt(userName, List, amtTotal, taxTotal, subTotal);
+				drawer.addReciept(receipt);
+				drawer.processTransaction(amtTotal);
+				updateInventory();
+			}
+			catch (Exception e)
+			{
+				Toolkit.getDefaultToolkit().beep();
+
+			}
 
 			refresh();
 
@@ -333,6 +377,11 @@ public class SalePanel extends JPanel
 			SubtotalVariableLabel.setText(fmt.format(subTotal));
 
 		}
+	}
+
+	public boolean notPositiveInteger(Integer num)
+	{
+		return num <= 0;
 	}
 
 	private void costPanel(JPanel panelMain)
