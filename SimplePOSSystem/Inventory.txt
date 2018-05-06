@@ -1,30 +1,30 @@
-1,Apple,0.99,0.12,BigProduceGuy,202,0,20
+1,Apple,0.99,0.12,LittleProduceGuy,200,0,35
 2,Orange,0.89,0.14,BigProduceGuy,230,0,20
-3,Banana,0.24,0.19,BigProduceGuy,199,0,20
-4,Milk 1 gallon,2.99,1.55,BigProduceGuy,208,0,20
-5,Tomato,0.59,0.1,BigProduceGuy,215,0,20
+3,Banana,0.24,0.19,LittleProduceGuy,199,0,20
+4,Milk 1 gallon,2.99,1.55,BigProduceGuy,206,0,20
+5,Tomato,0.59,0.1,MidProduceGuy,215,0,20
 6,Carrot Bunch,0.99,0.12,BigProduceGuy,198,200,20
 7,Avocado medium,0.39,0.12,BigProduceGuy,200,0,20
 8,Egg 1 dozen large,1.68,1.12,BigProduceGuy,100,0,20
-9,Butter unsalted,2.68,2.0,BigProduceGuy,100,0,20
+9,Butter unsalted,2.68,2.0,MidProduceGuy,100,0,20
 10,Diet Coke 2 liter,1.58,1.0,BigProduceGuy,99,0,20
 11,Orange Juice 59 fl oz.,1.99,1.0,BigProduceGuy,99,0,20
-12,Red Grapes,1.49,1.0,BigProduceGuy,100,0,20
-13,Apple juice 64 fl oz,1.19,0.89,BigProduceGuy,100,0,20
+12,Red Grapes,1.49,1.0,LittleProduceGuy,100,0,20
+13,Apple juice 64 fl oz,1.19,0.89,MidProduceGuy,100,0,20
 14,Spaghetti,1.39,0.89,BigProduceGuy,94,0,20
-15,Flavored,0.39,0.19,BigProduceGuy,99,0,20
+15,Flavored,0.39,0.19,MidProduceGuy,99,0,20
 16,Diced tomatoes 14.5 oz,0.89,0.49,BigProduceGuy,100,0,20
 17,Rubber Chicken,0.89,0.49,BigProduceGuy,95,0,20
 18,Mozzarella cheese 8 oz,1.89,1.49,BigProduceGuy,100,0,20
-19,Hummus 10 oz,1.89,1.49,BigProduceGuy,99,0,20
+19,Hummus 10 oz,1.89,1.49,LittleProduceGuy,99,0,20
 20,Lettuce medium,0.89,0.49,BigProduceGuy,95,0,20
 21,Pasta sauce,0.99,0.69,BigProduceGuy,100,0,20
-22,Chicken breast ,2.29,1.29,BigProduceGuy,100,0,20
+22,Chicken breast ,2.29,1.29,LittleProduceGuy,100,0,20
 23,Ground beef ,2.99,2.29,BigProduceGuy,100,0,20
-24,Ground coffee ,3.99,1.29,BigProduceGuy,94,0,20
+24,Ground coffee ,3.99,1.29,MidProduceGuy,94,0,20
 25,Corn on cob 4 pack ,3.99,1.29,BigProduceGuy,100,0,20
-26,Choc. chip cookies 52ct,5.0,3.29,BigProduceGuy,100,0,20
+26,Choc. chip cookies 52ct,5.0,3.29,LittleProduceGuy,100,0,20
 27,Bagel 6 ct ,2.98,1.29,BigProduceGuy,100,0,20
-28,Ketchup 32floz,3.38,2.29,BigProduceGuy,100,0,20
+28,Ketchup 32floz,3.38,2.29,MidProduceGuy,100,0,20
 29,Peanut butter 40 oz ,5.78,4.29,BigProduceGuy,100,0,20
-30,Slice cheese 16 oz ,3.67,1.29,BigProduceGuy,100,0,20
+30,Slice cheese 16 oz ,3.67,1.29,LittleProduceGuy,100,0,20
