@@ -1,4 +1,6 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -15,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 public class OrderPanel extends JPanel
 {
@@ -23,6 +26,7 @@ public class OrderPanel extends JPanel
 	public final int WIDTH = 1200;
 	public final int HEIGHT = 1300;
 
+	Node<Item> lastNode;
 	private Inventory inventory;
 	private JTextArea textArea;
 	private JTextField supplierNameTextField;
@@ -31,32 +35,28 @@ public class OrderPanel extends JPanel
 	private JTextField quantityTextField;
 	private JTextField getItemDetailTextField;
 
+	final String ORDER_FILE = "order.txt";
+
 	public OrderPanel(Inventory inventory)
 	{
 		initialize();
-
 		this.inventory = inventory;
-
+		textArea = new JTextArea(100, 100);
+		add(textArea);
+		textArea.setFont(new Font("Courier New", Font.PLAIN, 15));
+		JScrollPane scroll = new JScrollPane(textArea);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setBounds(400, 10, 500, 680);
+		add(scroll, BorderLayout.EAST);
 	}
 
 	private void initialize()
 	{
 		setLayout(null);
 
-		textArea = new JTextArea();
-		textArea.setBackground(new Color(245, 255, 250));
-		textArea.setLineWrap(true);
-		textArea.setBounds(294, 6, 600, 500);
-		JScrollPane scroll = new JScrollPane();
-		textArea.setVisible(true);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		add(textArea);
-		add(scroll);
-
-		scroll.setVisible(true);
-
 		JButton getCurrentInventoryButton = new JButton("Get current supplier inventory");
-		getCurrentInventoryButton.setBounds(49, 347, 208, 67);
+		getCurrentInventoryButton.setBackground(Color.BLUE);
+		getCurrentInventoryButton.setBounds(17, 338, 208, 67);
 		add(getCurrentInventoryButton);
 
 		getCurrentInventoryButton.addActionListener(new ActionListener()
@@ -64,9 +64,22 @@ public class OrderPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				NodeList<Item> currentInventory = inventory.getCurrentInventory();
-				Node<Item> node = currentInventory.getHead().getNext();
-				Node<Item> lastNode = currentInventory.getTail().getPrev();
+				Tree<Item> currentInventory = inventory.getCurrentInventory();
+				Node<Item> node = currentInventory.getRoot();
+				Node<Item> tempNode = node;
+				boolean loop = true;
+				lastNode = node;
+				while (loop)
+				{
+					if (lastNode.getNext() == null)
+					{
+						loop = false;
+					}
+					else
+					{
+						lastNode = lastNode.getNext();
+					}
+				}
 				Map<String, String> supplierItemMap = new HashMap<>();
 				textArea.setText("Current Supplier Inventory List \n\n");
 				while (true)
@@ -147,7 +160,7 @@ public class OrderPanel extends JPanel
 		supplierNameLabel.setBounds(49, 25, 91, 16);
 		add(supplierNameLabel);
 		supplierNameTextField = new JTextField();
-		supplierNameTextField.setBounds(152, 20, 130, 26);
+		supplierNameTextField.setBounds(152, 20, 170, 26);
 		add(supplierNameTextField);
 		supplierNameTextField.setColumns(10);
 
@@ -155,7 +168,7 @@ public class OrderPanel extends JPanel
 		itemNumLabel.setBounds(79, 67, 61, 16);
 		add(itemNumLabel);
 		itemNumTextField = new JTextField();
-		itemNumTextField.setBounds(152, 62, 130, 26);
+		itemNumTextField.setBounds(152, 62, 170, 26);
 		add(itemNumTextField);
 		itemNumTextField.setColumns(10);
 
@@ -163,7 +176,7 @@ public class OrderPanel extends JPanel
 		itemDescriptionLabel.setBounds(23, 105, 117, 16);
 		add(itemDescriptionLabel);
 		itemDescTextField = new JTextField();
-		itemDescTextField.setBounds(152, 100, 130, 26);
+		itemDescTextField.setBounds(152, 100, 170, 26);
 		add(itemDescTextField);
 		itemDescTextField.setColumns(10);
 
@@ -171,37 +184,33 @@ public class OrderPanel extends JPanel
 		quantityLabel.setBounds(79, 145, 61, 16);
 		add(quantityLabel);
 		quantityTextField = new JTextField();
-		quantityTextField.setBounds(152, 140, 130, 26);
+		quantityTextField.setBounds(152, 140, 170, 26);
 		add(quantityTextField);
 		quantityTextField.setColumns(10);
 
-		JButton autoOrder = new JButton("Auto Order");
-		autoOrder.setBounds(93, 448, 117, 29);
-		add(autoOrder);
-		autoOrder.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				NodeList<Item> currentInventory = inventory.getCurrentInventory();
-				Node<Item> node = currentInventory.getHead().getNext();
-				Node<Item> lastNode = currentInventory.getTail().getPrev();
-				boolean loop = true;
-				while (node != lastNode)
-				{
-					int threshold = node.getElement().getOrderThreshold();
-					int quantityOnOrder = node.getElement().getQuantityOnOrder();
-					int itemNumber = node.getElement().getItemNumber();
-					if (quantityOnOrder < threshold)
-					{
-						int quantityToOrder = threshold - quantityOnOrder;
-						placeOrder(itemNumber, quantityToOrder);
-					}
-					node = node.getNext();
-				}
-			}
-		});
+		// JButton autoOrder = new JButton("Auto Order");
+		// autoOrder.setBounds(93, 448, 117, 29);
+		// add(autoOrder);
+		// autoOrder.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// Tree<Item> currentInventory = inventory.getCurrentInventory();
+		// Node<Item> node = currentInventory.getRoot();
+		//// Node<Item> lastNode = currentInventory.getTail().getPrev();
+		// boolean loop = true;
+		// while (node != lastNode) {
+		// int threshold = node.getElement().getOrderThreshold();
+		// int quantityOnOrder = node.getElement().getQuantityOnOrder();
+		// int itemNumber = node.getElement().getItemNumber();
+		// if(quantityOnOrder < threshold) {
+		// int quantityToOrder = threshold - quantityOnOrder;
+		// placeOrder(itemNumber, quantityToOrder);
+		// }
+		// node = node.getNext();
+		// }
+		// }
+		// });
 
 		JButton placeOrderButton = new JButton("Place Order");
 		placeOrderButton.setBounds(106, 183, 117, 29);
@@ -265,8 +274,26 @@ public class OrderPanel extends JPanel
 
 	private void placeOrder(int itemNumber, int quantity)
 	{
-		NodeList<Item> currentInventory = inventory.getCurrentInventory();
-		Node<Item> item = currentInventory.find(itemNumber);
+		Tree<Item> currentInventory = inventory.getCurrentInventory();
+		// Node<Item> item = currentInventory.getItem(itemNumber);
+		Node<Item> item = currentInventory.getRoot();
+		boolean loop = true;
+		while (loop)
+		{
+			if (item == null)
+			{
+				textArea.setText("Item not found in inventory, add item to the inventory to be able to order.");
+				loop = false;
+			}
+			else if ((item.getElement().getItemNumber() == itemNumber))
+			{
+				loop = false;
+			}
+			else
+			{
+				item = item.getNext();
+			}
+		}
 		if (null == item)
 		{
 			textArea.setText("Item not found in inventory, add item to the inventory to be able to order.");
@@ -280,22 +307,23 @@ public class OrderPanel extends JPanel
 
 	private void updateAsExistingItemInventory(int itemNumber, int quantity)
 	{
-		inventory.updateQuantity(itemNumber, quantity);
+		inventory.updateQuantityOnOrder(itemNumber, quantity);
 		Item item = inventory.getItem(itemNumber);
 		// supplierNameTextField.setText("");
 		// itemNumTextField.setText("");
 		// itemDescTextField.setText("");
 		// quantityTextField.setText("");
-		textArea.setText(
-				"Order successfully placed. Below is the updated inventory for the item.\n\n" + item.toString());
+		textArea.setText("Order successfully placed. \nBelow is the updated inventory for the item.\n\n" + "Order of: "
+				+ quantity + " " + item.getName().toString() + " " + "\n" + "Item number: " + item.getItemNumber() + " "
+				+ "\n" + "Supplier: " + item.getSupplier());
 	}
 
 	private void keepTrackOfOrder(int itemNumber, int quantity)
 	{
 		BufferedWriter bufferWriter = null;
 		boolean loop = true;
-		NodeList<Item> currentInventory = inventory.getCurrentInventory();
-		Node<Item> node = currentInventory.getHead().getNext();
+		Tree<Item> currentInventory = inventory.getCurrentInventory();
+		Node<Item> node = currentInventory.getRoot();
 		while (loop)
 		{
 			if (node.getElement().getItemNumber() == itemNumber)
@@ -307,7 +335,9 @@ public class OrderPanel extends JPanel
 		{
 			String mycontent = "Item number: " + itemNumber + "\n" + "Quantity: " + quantity + "\n" + "Supplier"
 					+ supplier + "\n\n";
-			File file = new File("/Users/karishma/Documents/workspace/pos/src/main/resources/order.txt");
+
+			File file = new File(ORDER_FILE);
+
 			if (!file.exists())
 			{
 				file.createNewFile();
@@ -334,4 +364,5 @@ public class OrderPanel extends JPanel
 			}
 		}
 	}
+
 }
