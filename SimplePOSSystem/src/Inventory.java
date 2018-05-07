@@ -11,6 +11,7 @@ public class Inventory
 	private Tree<Item> inventory;
 	final String FILE = "Inventory.txt";
 	private String bigString = "";
+	private String orderString = "";
 
 	public Inventory()
 	{
@@ -330,6 +331,35 @@ public class Inventory
 			list.insertLast(node.getElement());
 			reportTraversal(node.getRight());
 			return list;
+		}
+		else
+		{
+			return null;
+		}
+
+	}
+
+	public String reportOrdered()
+	{
+		orderString = "****************************************************************\n";
+		orderString += "                  All ordered Items:\n";
+		orderString += "****************************************************************\n";
+
+		return reportOrderedTraverse(inventory.getRoot());
+	}
+
+	public String reportOrderedTraverse(Node<Item> node)
+	{
+
+		if (node != null)
+		{
+			reportOrderedTraverse(node.getLeft());
+			if (node.getElement().getQuantityOnOrder() > 0)
+			{
+				orderString += node.getElement().reportItem();
+			}
+			reportOrderedTraverse(node.getRight());
+			return orderString;
 		}
 		else
 		{
