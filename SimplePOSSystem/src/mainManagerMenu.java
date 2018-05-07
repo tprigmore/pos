@@ -19,7 +19,7 @@ public class mainManagerMenu
 		JTabbedPane tp = new JTabbedPane();
 		tp.addTab("Sales", new SalePanel(inventory, drawer));
 		tp.addTab("Inventory", new InventoryPanel(inventory));
-		tp.addTab("Orders", new OrderPanel());
+		tp.addTab("Orders", new OrderPanel(inventory));
 		tp.addTab("Reports", new ReportPanel(inventory, drawer));
 
 		frame.getContentPane().add(tp);
