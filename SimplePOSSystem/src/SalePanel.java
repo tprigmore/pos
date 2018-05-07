@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -33,7 +34,7 @@ public class SalePanel extends JPanel
 
 	JTextArea textAreaPrint;
 
-	JTextField textAreaItemNumber, textAreaQuantity;
+	JTextField textAreaItemNumber, textAreaQuantity, textFeildPayment;
 
 	JButton buttonAddItem, buttonRemoveItem, buttonRemoveAll, buttonCompleteOr, btnReturn;
 
@@ -170,15 +171,20 @@ public class SalePanel extends JPanel
 		labelTotal.setBounds(33, 598, 114, 29);
 		add(labelTotal);
 
-		SubtotalVariableLabel = new JLabel(subTotal.toString());
+		JLabel customerCurrency = new JLabel("Payment Amount:");
+		customerCurrency.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		customerCurrency.setBounds(273, 527, 148, 22);
+		add(customerCurrency);
+
+		SubtotalVariableLabel = new JLabel(fmt.format(subTotal));
 		SubtotalVariableLabel.setBounds(113, 530, 46, 14);
 		add(SubtotalVariableLabel);
 
-		TaxVariableLabel = new JLabel(taxTotal.toString());
+		TaxVariableLabel = new JLabel(fmt.format(taxTotal));
 		TaxVariableLabel.setBounds(127, 570, 46, 14);
 		add(TaxVariableLabel);
 
-		TotalVariableLabel = new JLabel(amtTotal.toString());
+		TotalVariableLabel = new JLabel(fmt.format(amtTotal));
 		TotalVariableLabel.setBounds(157, 608, 46, 14);
 		add(TotalVariableLabel);
 
@@ -191,6 +197,10 @@ public class SalePanel extends JPanel
 		textAreaQuantity = new JTextField();
 		textAreaQuantity.setBounds(862, 114, 120, 29);
 		add(textAreaQuantity);
+
+		textFeildPayment = new JTextField();
+		textFeildPayment.setBounds(431, 529, 86, 20);
+		add(textFeildPayment);
 
 		// Text area
 		textAreaPrint = new JTextArea(25, 40);
@@ -357,24 +367,33 @@ public class SalePanel extends JPanel
 				{
 					throw new Exception();
 				}
+
+				Double payment = Double.parseDouble(textFeildPayment.getText());
+				if (payment - amtTotal <= -.0000000001)
+				{
+					throw new Exception();
+				}
+				Double change = payment - amtTotal;
 				String userName = drawer.username;
 				Receipt receipt = new Receipt(userName, List, amtTotal, taxTotal, subTotal);
 				drawer.addReciept(receipt);
 				drawer.processTransaction(amtTotal);
 				updateInventory();
+
+				JOptionPane.showMessageDialog(null, "Change Due: " + fmt.format(change));
+
+				refresh();
+
+				textAreaPrint.setText(ListToString());
+				TotalVariableLabel.setText(fmt.format(amtTotal));
+				TaxVariableLabel.setText(fmt.format(taxTotal));
+				SubtotalVariableLabel.setText(fmt.format(subTotal));
 			}
 			catch (Exception e)
 			{
 				Toolkit.getDefaultToolkit().beep();
 
 			}
-
-			refresh();
-
-			textAreaPrint.setText(ListToString());
-			TotalVariableLabel.setText(fmt.format(amtTotal));
-			TaxVariableLabel.setText(fmt.format(taxTotal));
-			SubtotalVariableLabel.setText(fmt.format(subTotal));
 
 		}
 	}
