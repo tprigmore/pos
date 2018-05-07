@@ -35,11 +35,11 @@ public class Receipt
 
 	public String toString()
 	{
-		String result = "********************************************************\n";
+		String result = "*************************************************************************************\n";
 
 		result += "Receipt Number: " + receiptNumber + "\n\nCashier: " + userName + "\n" + "Date: " + dateStr + "\n\n";
 
-		result += String.format("%-15s%-13s%-15s%-1s", "Item Number", "Item Name", "Qty & Price", "Item Subtotal")
+		result += String.format("%-15s%-23s%-17s%-1s", "Item Number", "Item Name", "Qty & Price", "Item Subtotal")
 				+ "\n";
 
 		for (int i = 0; i < List.size(); i++)
