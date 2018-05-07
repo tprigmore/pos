@@ -42,7 +42,7 @@ public class TransactionItem
 	public String toString()
 	{
 
-		return String.format("%-15s%-13s%-15s%-1s", item.getItemNumber(), item.getName(),
+		return String.format("%-15s%-23s%-17s%-1s", item.getItemNumber(), item.getName(),
 				(qty + " @ " + fmt.format(item.getSalePrice())), fmt.format(itemTotal));
 
 	}
