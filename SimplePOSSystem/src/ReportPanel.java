@@ -82,6 +82,7 @@ public class ReportPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				textArea.setText(inventory.reportOrdered());
 			}
 		});
 		btnOrders.setFont(new Font("Tahoma", Font.PLAIN, 18));
