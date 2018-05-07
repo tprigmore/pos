@@ -316,9 +316,11 @@ public class Inventory
 
 	}
 
-	public NodeList<Item> getCurrentInventory()
+	public Tree<Item> getCurrentInventory()
 	{
-		return buildNodeList(inventory.getRoot());
+		Tree<Item> inv = new Tree<Item>();
+		inv = inventory;
+		return inv;
 	}
 
 	public NodeList<Item> buildNodeList(Node<Item> node)
