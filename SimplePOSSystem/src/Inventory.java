@@ -1,7 +1,9 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -12,6 +14,7 @@ public class Inventory
 	final String FILE = "Inventory.txt";
 	private String bigString = "";
 	private String orderString = "";
+	private final DateFormat DATEFORM = new SimpleDateFormat("MM/dd/yy hh:mm:ss aa");
 
 	public Inventory()
 	{
@@ -195,6 +198,8 @@ public class Inventory
 	{
 		int quantity;
 		int quantityThreshod;
+		BufferedWriter bufferWriter = null;
+
 		Item item = new Item(itemNumber);
 
 		Node<Item> temp = inventory.findNode(item);
@@ -220,6 +225,42 @@ public class Inventory
 				temp.getElement().setQuantityOnOrder(temp.getElement().getOrderThreshold() * 2);
 
 			}
+			try
+			{
+				Date transactionTime = new Date();
+				String dateStr = DATEFORM.format(transactionTime);
+				String mycontent = "Date: " + dateStr + "\n";
+				mycontent += "Item number: " + temp.getElement().getItemNumber() + "\n" + "Quantity: "
+						+ (temp.getElement().getOrderThreshold() * 2) + "\n" + "Supplier: "
+						+ temp.getElement().getSupplier() + "\n\n";
+
+				File file = new File("Auto_order.txt");
+
+				if (!file.exists())
+				{
+					file.createNewFile();
+				}
+				FileWriter fw = new FileWriter(file, true);
+				bufferWriter = new BufferedWriter(fw);
+				bufferWriter.write(mycontent);
+				// System.out.println("File written Successfully");
+			}
+			catch (IOException ioe)
+			{
+				ioe.printStackTrace();
+			}
+			finally
+			{
+				try
+				{
+					if (bufferWriter != null)
+						bufferWriter.close();
+				}
+				catch (Exception ex)
+				{
+					System.out.println("Error in closing the BufferedWriter" + ex);
+				}
+			}
 		}
 	}
 
@@ -237,14 +278,7 @@ public class Inventory
 		else
 		{
 			quantity = temp.getElement().getQuantityOnOrder();
-			if ((quantity - count) >= 0)
-			{
-				temp.getElement().setQuantityOnOrder(quantity - count);
-			}
-			else
-			{
-				temp.getElement().setQuantityOnOrder(0);
-			}
+			temp.getElement().setQuantityOnOrder(quantity + count);
 		}
 	}
 
