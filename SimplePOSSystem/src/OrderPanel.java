@@ -7,6 +7,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -320,21 +323,25 @@ public class OrderPanel extends JPanel
 
 	private void keepTrackOfOrder(int itemNumber, int quantity)
 	{
+		final DateFormat DATEFORM = new SimpleDateFormat("MM/dd/yy hh:mm:ss aa");
+
 		BufferedWriter bufferWriter = null;
-		boolean loop = true;
 		Tree<Item> currentInventory = inventory.getCurrentInventory();
 		Node<Item> node = currentInventory.getRoot();
-		while (loop)
+		while (true)
 		{
 			if (node.getElement().getItemNumber() == itemNumber)
-				loop = false;
+				break;
 			node = node.getNext();
 		}
 		String supplier = node.getElement().getSupplier();
 		try
 		{
-			String mycontent = "Item number: " + itemNumber + "\n" + "Quantity: " + quantity + "\n" + "Supplier"
-					+ supplier + "\n\n";
+			Date transactionTime = new Date();
+			String dateStr = DATEFORM.format(transactionTime);
+			String mycontent = "Date: " + dateStr + "\n";
+			mycontent += "Item number: " + itemNumber + "\n" + "Quantity: " + quantity + "\n" + "Supplier: " + supplier
+					+ "\n\n";
 
 			File file = new File(ORDER_FILE);
 
@@ -345,7 +352,7 @@ public class OrderPanel extends JPanel
 			FileWriter fw = new FileWriter(file, true);
 			bufferWriter = new BufferedWriter(fw);
 			bufferWriter.write(mycontent);
-			System.out.println("File written Successfully");
+			// System.out.println("File written Successfully");
 		}
 		catch (IOException ioe)
 		{
